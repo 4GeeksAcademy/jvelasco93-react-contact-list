@@ -4,6 +4,7 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
 import { StateProvider } from "./hooks/useGlobalReducer.jsx";
+import { contactsService } from "./services/contactsServices.js";
 
 function Main() {
   return (
