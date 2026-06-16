@@ -3,7 +3,7 @@ import {
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import { Home } from "./pages/Home";
+import { Home } from "./pages/ContactList";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
