@@ -1,8 +1,7 @@
 export const contactsMapper = {
     toCreateRequest(formFields) {
-        const nameValue = formFields.name?.trim();
         return {
-            name: nameValue && nameValue !== "" ? nameValue : "Sin Nombre",
+            name: formFields.name?.trim() || "",
             phone: formFields.phone?.trim() || "",
             email: formFields.email?.trim() || "",
             address: formFields.address?.trim() || ""
