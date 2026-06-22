@@ -1,13 +1,13 @@
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import StoreProvider from "../hooks/useGlobalReducer.jsx";
 import {useEffect} from "react";
-import {ACTIONS} from "../reducer.js";
+import {ACTIONS} from "../storeReducer.js";
 import {ContactCard} from "../components/ContactCard.jsx";
 import {Link} from "react-router-dom";
 import {contactsService} from "../services/contactsServices.js";
 
 
 export function Home() {
-    const {state, dispatch} = useGlobalReducer();
+    const {state, dispatch} = StoreProvider();
 
     useEffect(() => {
              void loadContacts();
@@ -29,10 +29,14 @@ export function Home() {
     async function handleDeleteContact(contactId) {
         try {
             await contactsService.deleteContact(contactId);
+            dispatch({
+                type: ACTIONS.DELETE_CONTACT,
+                payload: contactId
+            });
         } catch (error) {
             console.error("Error deleting contact:", error);
         } finally {
-            await loadContacts();
+            // Implementar otra cosa
         }
     }
 

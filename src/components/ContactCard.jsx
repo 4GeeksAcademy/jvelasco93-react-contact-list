@@ -26,10 +26,13 @@ export function ContactCard({contact, onDelete}) {
 
                 <div
                     className="col-12 col-lg-3 d-flex align-items-center justify-content-center justify-content-lg-end gap-3">
-                    <button type="button" className="btn btn-primary">
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+
+                    >
                         Edit
                     </button>
-
                     <button
                         type="button"
                         className="btn btn-danger"

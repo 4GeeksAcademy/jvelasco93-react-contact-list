@@ -1,27 +1,19 @@
 import { useContext, useReducer, createContext } from "react";
-import reducer, { getInitialState } from "../reducer";
+import storeReducer, { initialStore } from "../storeReducer.js";
 
-const AppStateContext = createContext(undefined);
+const StoreContext = createContext(undefined);
 
 export function StateProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, undefined, getInitialState);
+  const [state, dispatch] = useReducer(storeReducer, initialStore());
 
   return (
-    <AppStateContext.Provider value={{ state, dispatch }}>
+    <StoreContext.Provider value={{ state, dispatch }}>
       {children}
-    </AppStateContext.Provider>
+    </StoreContext.Provider>
   );
 }
 
-export default function useGlobalReducer() {
-  const context = useContext(AppStateContext);
-
-  if (!context) {
-    throw new Error(
-      "useGlobalReducer debe ser usado dentro de un StateProvider",
-    );
-  }
-  const { state, dispatch } = context;
-
+export default function StoreProvider() {
+  const { state, dispatch } = useContext(StoreContext);
   return { state, dispatch };
 }
