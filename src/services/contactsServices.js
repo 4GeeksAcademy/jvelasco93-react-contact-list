@@ -1,33 +1,66 @@
-import { apiGateway } from "./apiGateway";
-import { contactsMapper } from "./contactsMapper";
+import { apiGateway } from "./apiGateway.js";
+import { contactsMapper } from "./contactsMapper.js";
 
-const AGENDA_SLUG = "jvelasco"
+const AGENDA_SLUG = "jvelasco";
+async function ensureAgenda() {
+    try {
+        await apiGateway.post(`/agendas/${AGENDA_SLUG}`, {
+            slug: AGENDA_SLUG
+        });
+    } catch (error) {
+        if (isAgendaAlreadyExistsError(error)) return;
+        throw error;
+    }
+}
 
+
+function isAgendaAlreadyExistsError(error) {
+    return (
+        error.status === 400 &&
+        error.detail?.includes("already exists")
+    );
+}
 
 export const contactsService = {
     async getContacts() {
-        const data = await apiGateway.get(`/agendas/${AGENDA_SLUG}/contacts`)
+        await ensureAgenda();
+
+        const data = await apiGateway.get(
+            `/agendas/${AGENDA_SLUG}/contacts`
+        );
+
         const rawContacts = data.contacts || [];
-        return rawContacts.map(contact => contactsMapper.fromApi(contact));
+
+        return rawContacts.map(contact =>
+            contactsMapper.fromApi(contact)
+        );
     },
 
-
     async createContact(contactData = {}) {
-        const createPayload = contactsMapper.toCreateRequest(contactData)
-        const rawResponse = await apiGateway.post(`/agendas/${AGENDA_SLUG}/contacts`, createPayload)
-        return contactsMapper.fromApi(rawResponse)
+        const payload = contactsMapper.toCreateRequest(contactData);
+
+        const res = await apiGateway.post(
+            `/agendas/${AGENDA_SLUG}/contacts`,
+            payload
+        );
+
+        return contactsMapper.fromApi(res);
     },
 
     async updateContact(contactId, formFields) {
-        const updatePayload = contactsMapper.toUpdateRequest(formFields)
-        const rawResponse = await apiGateway.put(`/agendas/${AGENDA_SLUG}/contacts/${contactId}`, updatePayload)
-        return contactsMapper.fromApi(rawResponse)
+        const payload = contactsMapper.toUpdateRequest(formFields);
+
+        const res = await apiGateway.put(
+            `/agendas/${AGENDA_SLUG}/contacts/${contactId}`,
+            payload
+        );
+
+        return contactsMapper.fromApi(res);
     },
 
-    // La api devuelve error 500 al intentar borrar una tarea que no existe, pero con usuario que existe
     async deleteContact(contactId) {
-        return await apiGateway.delete(`/agendas/${AGENDA_SLUG}/contacts/${contactId}`)
+        await apiGateway.delete(
+            `/agendas/${AGENDA_SLUG}/contacts/${contactId}`
+        );
     }
 };
-
-console.log(contactsService.getContacts())

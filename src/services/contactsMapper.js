@@ -24,9 +24,10 @@ export const contactsMapper = {
     },
 
     fromApi(apiData) {
+        const defaultNameValue = "string"
         return {
             id: apiData.id,
-            name: apiData.name || "",
+            name: apiData.name === defaultNameValue ? "" : apiData.name,
             phone: apiData.phone || "",
             email: apiData.email || "",
             address: apiData.address || ""

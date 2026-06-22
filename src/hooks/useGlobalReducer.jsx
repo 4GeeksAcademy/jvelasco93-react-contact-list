@@ -1,10 +1,10 @@
 import { useContext, useReducer, createContext } from "react";
 import reducer, { getInitialState } from "../reducer";
 
-const AppStateContext = createContext();
+const AppStateContext = createContext(undefined);
 
 export function StateProvider({ children }) {
-  const [state, dispatch] = useReducer(reducer, getInitialState());
+  const [state, dispatch] = useReducer(reducer, undefined, getInitialState);
 
   return (
     <AppStateContext.Provider value={{ state, dispatch }}>
