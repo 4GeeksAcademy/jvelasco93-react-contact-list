@@ -1,7 +1,5 @@
-export const initialStore = () => {
-    return {
-        contacts: [],
-    };
+export const initialStore = {
+    contacts: [],
 }
 
 export default function storeReducer(state, action = {}) {
@@ -40,7 +38,8 @@ export default function storeReducer(state, action = {}) {
 }
 export const ACTIONS = {
     SET_CONTACTS: "SET_CONTACTS",
-    ADD_CONTACT: "ADD_CONTACT",
-    DELETE_CONTACT: "DELETE_CONTACT",
     UPDATE_CONTACT: "UPDATE_CONTACT",
+    DELETE_CONTACT: "DELETE_CONTACT",
+    ADD_CONTACT: "ADD_CONTACT",
+    CREATE_CONTACT: "CREATE_CONTACT",
 }

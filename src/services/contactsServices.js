@@ -1,7 +1,8 @@
 import { apiGateway } from "./apiGateway.js";
-import { contactsMapper } from "./contactsMapper.js";
+import contactsMapper from "./contactsMapper.js";
 
-const AGENDA_SLUG = "jvelasco";
+export const AGENDA_SLUG = "jvelasco";
+
 async function ensureAgenda() {
     try {
         await apiGateway.post(`/agendas/${AGENDA_SLUG}`, {
@@ -13,7 +14,6 @@ async function ensureAgenda() {
     }
 }
 
-
 function isAgendaAlreadyExistsError(error) {
     return (
         error.status === 400 &&
@@ -22,9 +22,12 @@ function isAgendaAlreadyExistsError(error) {
 }
 
 export const contactsService = {
-    async getContacts() {
+    async initializeContacts() {
         await ensureAgenda();
+        return contactsService.getContacts();
+    },
 
+    async getContacts() {
         const data = await apiGateway.get(
             `/agendas/${AGENDA_SLUG}/contacts`
         );

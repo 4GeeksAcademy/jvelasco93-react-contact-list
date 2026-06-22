@@ -1,10 +1,11 @@
 import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
-import StoreProvider from "../hooks/useGlobalReducer.jsx";
 import {contactsService} from "../services/contactsServices.js";
+import useStore from "../hooks/useGlobalReducer.jsx";
+import {ACTIONS} from "../storeReducer.js";
 
 export default function AddContact() {
-    const {dispatch} = StoreProvider();
+    const {dispatch} = useStore();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -21,14 +22,14 @@ export default function AddContact() {
         e.preventDefault();
         try {
             const newContact = await contactsService.createContact(formData);
-            dispatch({type: "ADD_CONTACT", payload: newContact});
+            dispatch({
+                type: ACTIONS.ADD_CONTACT,
+                payload: newContact
+            })
+            navigate("/");
         } catch (error) {
             console.error("Error adding contact:", error);
-        } finally {
-            //
         }
-        navigate("/");
-
     };
 
     return (
@@ -43,7 +44,7 @@ export default function AddContact() {
                 <div className="mb-3">
                     <label htmlFor="fullName" className="form-label">Full Name</label>
                     <input type="text" className="form-control" id="name" name="name"
-                           placeholder="Full Name" value={formData.name} onChange={handleChange}/>
+                           placeholder="Full Name" value={formData.name} onChange={handleChange} required/>
                 </div>
 
                 <div className="mb-3">

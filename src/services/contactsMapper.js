@@ -1,4 +1,4 @@
-export const contactsMapper = {
+const contactsMapper = {
     toCreateRequest(formFields) {
         return {
             name: formFields.name?.trim() || "",
@@ -8,19 +8,13 @@ export const contactsMapper = {
         };
     },
 
-    // NOTA PARA EL COMPONENTE (UPDATE): 
-    // Para evitar borrar datos por error, el formulario de edición SIEMPRE debe 
-    // inicializarse cargando los datos actuales del contacto. 
-    // De esta forma, un string vacío ("") significará que el usuario realmente desea borrar ese campo.
     toUpdateRequest(formFields) {
-        const payload = {};
-
-        if (formFields.name !== undefined) payload.name = formFields.name.trim();
-        if (formFields.phone !== undefined) payload.phone = formFields.phone.trim();
-        if (formFields.email !== undefined) payload.email = formFields.email.trim();
-        if (formFields.address !== undefined) payload.address = formFields.address.trim();
-
-        return payload;
+        return {
+            name: formFields.name.trim(),
+            phone: formFields.phone.trim(),
+            email: formFields.email.trim(),
+            address: formFields.address.trim()
+        };
     },
 
     fromApi(apiData) {
@@ -34,3 +28,5 @@ export const contactsMapper = {
         };
     }
 };
+
+export default contactsMapper;
